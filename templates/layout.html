@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <style>
+
+
+            body {
+                background-color: #F7F7F7;
+                height: 100%;
+
+            }
+
+            .container-fluid {
+                min-height: 100%;
+                overflow: hidden;
+            }
+
+
+            .header {
+                background: #F08E1F;
+                background: -moz-linear-gradient(bottom, #F08E1F 0%, #F0A616 88%, #FFFFFF 100%);
+                background: -webkit-linear-gradient(bottom, #F08E1F 0%, #F0A616 88%, #FFFFFF 100%);
+                background: linear-gradient(to top, #F08E1F 0%, #F0A616 88%, #FFFFFF 100%);
+                font-size: 30px;
+                color: #FFFFFF;
+                padding-top: 100px;
+                padding-bottom: 20px;
+                width: 100%;
+                text-align: center;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                letter-spacing: 30px;
+                height: 20%;
+
+
+           }
+
+        .sidebar {
+                padding-top: 100%;
+                padding-bottom: 90%;
+                width: 100%;
+                text-align: center;
+                border: 4px black;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                height: 60%;
+
+        }
+        .maincontent {
+                width: 90%;
+                text-align: Left;
+                padding-top: 100px;
+                padding-bottom: 50px;
+
+
+        }
+        .footer {
+                background: #F08E1F;
+                background: -moz-linear-gradient(top, #F08E1F 0%, #F0A616 88%, #FFFFFF 100%);
+                background: -webkit-linear-gradient(top, #F08E1F 0%, #F0A616 88%, #FFFFFF 100%);
+                background: linear-gradient(to bottom, #F08E1F 0%, #F0A616 88%, #FFFFFF 100%);
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 20%;
+
+           }
+
+         .font1 {
+                font-size: 36px;
+         }
+
+         .font2 {
+                font-size: 24px;
+         }
+
+        .font3 {
+                font-size: 20px;
+         ]
+
+
+
+
+        </style>
+
+    <body class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="header">
+                {% block label %} {% endblock %}
+            </div>
+        </div>
+        <div class ="row justify-content-center">
+            <div class="col-3">
+                <div class="sidebar">
+                    PLaceholder
+                </div>
+            </div>
+            <div class="col">
+                <div class="maincontent">
+                    {% block body %}
+                    {% endblock %}
+                </div>
+            </div>
+        <div class="row justify-content-center">
+            <div class="footer">
+
+            </div>
+        </div>
+
+        </div>
+
+
+
+
+    </body>
+
+
+
+
+
+</html>
+

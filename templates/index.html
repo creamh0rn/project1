@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block label %}
+goodreads reviews
+{% endblock %}
+
+
+
+{% block body %}
+    <table>
+        <tr><h1><span class="font1">Welcome!</span></h1></tr>
+        <tr><span class="font2">Sign in or Sign up Here!</span></h6></tr>
+        <tr style="height:20px;"></tr>
+        <form action="{{ url_for('signup') }}" method = "post">
+            <tr>
+                <td><span class="font3">Email Address:</span></td>
+                <td style="padding:10px;"><input class="form_control" name="email_address" placeholder="" required type="email"></td>
+            </tr>
+            <tr>
+                <td><span class="font3">Password:</span></td>
+                <td style="padding:10px;"><input class="form_control" name="password" placeholder="" required type="password"></td>
+            </tr
+            <tr>
+                <td style="padding-top:20px;"><button type="submit" class="btn btn-secondary">Click Here</button></td>
+            </tr>
+        </form>
+    </table>
+{% endblock %}
