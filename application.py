@@ -22,70 +22,71 @@ engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def index():
-    output_text = "tester"
-    return render_template("index.html")
-
-@app.route("/signup", methods=["GET", "POST"])
-def signup():
-    if flask.request.method == "GET":
-        return render_template("index.html")
+    if session.get("logged_in") == False:
+        return render_template("index.html", visible= "hidden")
     else:
-        #run a query to see if they're in there
-        #if not, send to sign up sheet
-        #if yes, log them in?
+        return redirect(url_for('home'))
 
+@app.route("/sign_in", methods=["POST", "GET"])
+def sign_in():
+    if flask.request.method == "GET":
+        return redirect(url_for('index'))
+    else:
         email_address = request.form.get("email_address")
         password = request.form.get("password")
-        session['smang_it'] = "smash it and hit it"
 
-        if db.execute("SELECT * FROM USERS WHERE EMAIL_ADDRESS = :email_address", {"email_address": email_address}).rowcount == 1:
-            if db.execute("SELECT * FROM USERS WHERE EMAIL_ADDRESS = :email_address and PASSWORD = :password", {"email_address": email_address, "password": password}).rowcount == 1:
+        if db.execute("SELECT * FROM USERS WHERE EMAIL_ADDRESS = :email_address",
+                      {"email_address": email_address}).rowcount == 1:
+            if db.execute("SELECT * FROM USERS WHERE EMAIL_ADDRESS = :email_address and PASSWORD = :password",
+                          {"email_address": email_address, "password": password}).rowcount == 1:
                 session['logged_in'] = True
 
                 return redirect(url_for('home'))
             else:
-                return render_template("error.html", error_message= "incorrect password")
+                return render_template("index.html", error_message="Incorrect Password! Please try again", email_address = email_address, visible = "hidden")
         else:
-            return render_template("signup.html", email_address=email_address, password=password)
+            return render_template("signup.html", email_address=email_address, password=password, visible = "hidden")
 
 
-@app.route("/user_account", methods=["GET", "POST"])
-def user_account():
-    #method = post
-    if flask.request.method == "POST":
-        #collect variables
+@app.route("/sign_up", methods=["GET", "POST"])
+def sign_up():
+    if flask.request.method == "GET":
+        return redirect(url_for('index'))
+    else:
+        # collect variables
         email_address = request.form.get("email_address")
         password = request.form.get("password")
         first_name = request.form.get("first_name")
         last_name = request.form.get("last_name")
         birthday = request.form.get("birthday")
 
-        if db.execute("SELECT * FROM USERS WHERE EMAIL_ADDRESS = :email_address AND PASSWORD = :password",
-                      {"email_address": email_address, "password": password}).rowcount == 0:
-            db.execute("INSERT INTO USERS (EMAIL_ADDRESS, PASSWORD, FIRST_NAME, LAST_NAME, BIRTHDAY) VALUES (:EMAIL_ADDRESS, :PASSWORD, :FIRST_NAME, :LAST_NAME, :BIRTHDAY)", {"EMAIL_ADDRESS": email_address, "PASSWORD": password, "FIRST_NAME": first_name, "LAST_NAME": last_name, "BIRTHDAY": birthday})
-            db.commit()
+        db.execute(
+            "INSERT INTO USERS (EMAIL_ADDRESS, PASSWORD, FIRST_NAME, LAST_NAME, BIRTHDAY) VALUES (:EMAIL_ADDRESS, :PASSWORD, :FIRST_NAME, :LAST_NAME, :BIRTHDAY)",
+            {"EMAIL_ADDRESS": email_address, "PASSWORD": password, "FIRST_NAME": first_name, "LAST_NAME": last_name,
+             "BIRTHDAY": birthday})
+        db.commit()
 
-        else:
-            return redirect(url_for('home'))
+        x = db.execute("SELECT USER_ID, EMAIL_ADDRESS, PASSWORD FROM USERS WHERE EMAIL_ADDRESS = :EMAIL_ADDRESS and PASSWORD = :PASSWORD", {"EMAIL_ADDRESS":email_address, "PASSWORD": password}).fetchone()
 
-        message = session.get("smang_it")
-        return render_template("error.html", error_message= message)
-    #method = get
-    else:
-        if session.get("logged_in") == False:
-            #not signed in
-            return render_template("error.html", error_message = "not signed in")
-        else:
-            #home
-            return render_template("error.html", error_message = "signed in")
+
+        return render_template("error.html", error_message = x[0])
+
+
+
+
+
+
+
+
+
 
 
 @app.route("/home", methods=["POST", "GET"])
 def home():
 
-    return render_template("error.html", error_message= message)
+    return render_template("error.html", error_message= "main page")
 
 
 

@@ -1,19 +1,13 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Sign Up
+    {{ error_message }}
 {% endblock %}
 
 {% block label %}
-sign up
+    {{ error_message}}
 {% endblock %}
-
-
 
 {% block body %}
     {{ error_message }}
-
-
-    <form action="{{ url_for('sign_out') }}" method ="POST"><button class="btn btn-secondary"> SIGN OUT </button></form>
-
 {% endblock %}
