@@ -1,11 +1,13 @@
 import os
 import flask
 import requests
+import json
 
 from flask import Flask, session, render_template, request, redirect, url_for, app
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+
 
 app = Flask(__name__)
 
@@ -21,6 +23,7 @@ Session(app)
 # Set up database
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
+
 
 
 @app.route("/", methods=["GET"])
@@ -91,17 +94,35 @@ def home():
             return render_template("home.html", books = results)
 
 
-@app.route("/book", methods=["POST"])
+@app.route("/book", methods=["POST", "GET"])
 def book():
-    isbn = request.form.get("book")
-    book = db.execute("select * from books where isbn = :isbn", {"isbn":isbn}).fetchone()
-    title = book[1]
-    author = book[2]
-    year = book[3]
+    if flask.request.method == "GET":
+        return redirect(url_for("index"))
+    else:
+        isbn = request.form.get("book")
+        book = db.execute("select * from books where isbn = :isbn", {"isbn":isbn}).fetchone()
+        title = book[1]
+        author = book[2]
+        year = book[3]
+
+        key = "6YiIpG7a9sWusuN44erRVQ"
+
+        res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                           params={"key": key, "isbns": isbn})
+
+        data = res.json()
+
+        average_rating = data['books'][0]['average_rating']
+        number_ratings = data['books'][0]['work_ratings_count']
 
 
 
-    return render_template("error.html", error_message = book[2])
+
+
+
+        return render_template("book.html", number_ratings = number_ratings, book = book, average_rating=average_rating)
+
+
 
 
 

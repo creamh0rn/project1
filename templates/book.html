@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Book Bitch
+{% endblock %}
+
+{% block label %}
+    Book review
+{% endblock %}
+
+
+
+{% block body %}
+    <span class="font1">Book Details</span>
+
+    <table class="table">
+        <span class="font2">
+            <tr>
+                <td>Title:</td>
+                <td>{{ book.title }}</td>
+            </tr>
+            <tr>
+                <td>Author:</td>
+                <td>{{ book.author }}</td>
+            </tr>
+            <tr>
+                <td>Publication Year:</td>
+                <td>{{ book.year }}</td>
+            </tr>
+            <tr>
+                <td>ISBN:</td>
+                <td>{{ book.isbn }}</td>
+            </tr>
+            <tr>
+                <td>Average Rating from Goodreads:</td>
+                <td>{{ average_rating }}</td>
+            </tr>
+            <tr>
+                <td>Number Goodreads Ratings:</td>
+                <td>{{ number_ratings }}</td>
+            </tr>
+
+    </table>
+    <form action="{{ url_for('home') }}" method="post"><button class="btn btn-secondary" action="submit">New Search</button></form>
+{% endblock %}
