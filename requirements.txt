@@ -1,4 +1,1 @@
-Flask
-Flask-Session
-psycopg2-binary
-SQLAlchemy
+pandas=0.20.3
