@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ error_message }}
+{% endblock %}
+
+{% block label %}
+    {{ error_message}}
+{% endblock %}
+
+{% block body %}
+    <table>
+        <tr>
+            <span class="font2">Search for a Book Here:</span>
+        </tr>
+
+        <form action="{{ url_for('home') }}" method="post">
+
+            <tr>
+
+                <td><input name="search_bar" placeholder="Search by ISBN, author, or title" style="width:500px;"></td>
+            </tr>
+
+
+
+            <tr>
+                <td><button action="submit" class="btn btn-secondary">Search</button></td>
+            </tr>
+
+
+    </form>
+
+    </table>
+    <span class="font2" style="padding-top:20px;">Results:</span>
+
+        <form action="{{ url_for('book')}}" method="post" style="padding-top: 20px;">
+            <div class="form-group">
+                 <select class="form-control" name="book">
+                     {% for book in books %}
+                        <option value="{{book.isbn}}">{{book.title}} by {{book.author}} ( {{book.year}} )</option>
+                     {% else %}
+                        <option>No Results Found</option>
+                     {% endfor %}
+                 </select>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-secondary">Go</button>
+            </div>
+
+        </form>
+
+
+
+
+{% endblock %}
