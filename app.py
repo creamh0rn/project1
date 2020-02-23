@@ -3,7 +3,7 @@ import flask
 import requests
 import json
 
-from flask import Flask, session, render_template, request, redirect, url_for, app
+from flask import Flask, session, render_template, request, redirect, url_for, app, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -123,9 +123,32 @@ def book():
         return render_template("book.html", number_ratings = number_ratings, book = book, average_rating=average_rating)
 
 
+@app.route("/api/<isbn>", methods=["GET"])
+def api(isbn):
+    book = db.execute("select * from books where isbn = :isbn", {"isbn":isbn}).fetchone()
 
+    
 
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                       params={"key": "6YiIpG7a9sWusuN44erRVQ", "isbns": isbn})
 
+    data = res.json()
+
+    average_rating = data['books'][0]['average_rating']
+    number_ratings = data['books'][0]['work_ratings_count']
+
+    if book is None:
+        return jsonify({"error": "Invalid ISBN"}), 422
+
+    return jsonify({
+        "title": book.title,
+        "author": book.author,
+        "year": book.year,
+        "isbn": book.isbn,
+        "review_count": number_ratings,
+        "average_score": average_rating
+
+    })
 
 
 
